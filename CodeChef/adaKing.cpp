@@ -13,7 +13,8 @@ int main() {
 	while(t--) {
 		int n;
 		cin>>n;
-		int k=2, row=-1, flag=0;
+		int k=2, row=0, flag=0;
+		//count row for val n
 		for(int i=0; i<8; i++) {
 			if(flag==0) {
 				if(n>=k && n<=k+6) {
@@ -30,23 +31,25 @@ int main() {
 				k+=8;
 			}
 		}
-
-		//fill the board with X
+		
+		//fill brd with XXXX
 		char brd[8][8];
 		for(int i=0; i<8; i++) {
 			for(int j=0; j<8; j++) {
 				brd[i][j] = 'X';
 			}
 		}
-
-
+		
+		//fill brd with .....
 		for(int i=0; i<row; i++) {
 			for(int j=0; j<8; j++) {
 				brd[i][j] = '.';
 			}
 		}
+		
+		//chk
 		if(row%2==0) {
-			for(int i=0; i<n-8*row; i++) {
+			for(int i=0; i<(n-8*row); i++) {
 				brd[row][i] = '.';
 			}
 		} else {
@@ -54,6 +57,8 @@ int main() {
 				brd[row][i] = '.';
 			}
 		}
+
+		//output
 		brd[0][0]='O';
 		for(int i=0; i<8; i++) {
 			for(int j=0; j<8; j++) {
