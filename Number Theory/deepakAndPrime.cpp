@@ -2,24 +2,9 @@
 using namespace std;
 
 #define ll long long
-#define LIMIT 100000007
+#define LIMIT 10000007
 
 bool sieve[LIMIT];
-void primeSieve(bool *sieve) {
-	//built sieve
-	for(ll i=2; i*i<=LIMIT; i++) {
-		//chk for marked pos
-		if(!sieve[i]) {
-			//start from it's square
-			for(ll j=i*i; j<=LIMIT; j+=i) {
-				//mark as not prime
-				sieve[j] = 1;
-			}
-		}
-	}
-	//cornor case
-	sieve[0] = sieve[1] = 1;
-}
 
 int main() {
 
@@ -30,7 +15,17 @@ int main() {
 
 	ll n;
 	cin>>n;
-	primeSieve(sieve);
+
+	//prime sieve
+	sieve[0] = sieve[1] = 1;
+	for(ll i=2; i*i<=LIMIT; i++) {
+		if(!sieve[i]) {
+			for(ll j=i*i; j<=LIMIT; j+=i) {
+				sieve[j] = 1;
+			}
+		}
+	}
+
 	ll cnt = 1;
 	while(n && cnt<LIMIT) {
 		cnt++;
