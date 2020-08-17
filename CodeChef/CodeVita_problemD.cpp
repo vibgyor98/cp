@@ -2,9 +2,10 @@
 #include <stack>
 using namespace std;
 
-#define ll long long 
+#define ll long long
+#define MOD 1000000007
 
-void solve(ll *hist, ll n) {
+void solve(ll *hist, ll n, ll sum, ll breadth, ll height) {
 	stack<ll> s;
 	ll tp, areaoftp, i = 0, maxArea = 0;
 	while(i<n) {
@@ -22,57 +23,26 @@ void solve(ll *hist, ll n) {
 		areaoftp = hist[tp] * (s.empty() ? i : i - s.top() - 1);
 		if(maxArea < areaoftp) maxArea = areaoftp;
 	}
-	cout<<maxArea;
+
+	ll res = (sum - maxArea) % MOD;
+	ll out = (res * height * breadth) % MOD;
+	cout << out;
 }
 
 int main() {
 
-	#ifndef ONLINE_JUDGE
-	freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
-	#endif
-
-	ll n; cin>>n;
+	ll n, sum = 0; 
+	cin >> n;
 	ll hist[n];
-	for(ll i=0; i<n; i++) cin>>hist[i];
-	solve(hist,n);
+	ll breadth, height;
+	cin >> breadth >> height;
+	for(ll i = 0; i < n; i++) {
+		cin >> hist[i];
+		sum += hist[i];
+	}
+	 
+	solve(hist, n, sum, breadth, height);
 
 	return 0;
 }
 
-/*
-input
-5
-1 2 3 4 5
-
-output
-9
-
-*/
-
-//TCS CodeVita Question
-/*
-input
-7
-1 1
-6 7 3 4 5 1 3
-
-output
-14
-
-Explanation
-Total volume of shaded region is 15.
-Total volume of histogram is 29.
-Largest Cuboid obtained is 14. 
-Basically 29 - 15 = 14.
-14 * 1(height) = 14.
-
-input
-7
-1 2
-1 2 6 4 5 3 4
-
-output
-20
-
-*/
