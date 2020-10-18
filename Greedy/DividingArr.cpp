@@ -1,6 +1,9 @@
 #include <iostream>
-#include <climits>
+#include <algorithm>
 using namespace std;
+
+#define ll long long
+#define MOD 1000000007
 
 int main() {
 
@@ -8,34 +11,31 @@ int main() {
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
 	#endif
-	cin.sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(false);	
+	cin.tie(NULL); cout.tie(NULL);
 
-	int t; cin >> t;
+	ll t; cin >> t;
 	while(t--) {
-		int n; cin >> n;
-		int a[n];
+		ll n; cin >> n;
+		ll a[n];
 		for(int i = 0; i < n; i++) cin >> a[i];
 
-		int div = n / 2;
-		int sum1 = a[0], sum2 = a[div];
-		for(int i = 1; i < div; i++) {
-			sum1 -= a[i];
+		//Greedy logic
+		if(n == 1) cout << a[0] << " " << a[0] << "\n";
+		else {
+			sort(a,a+n);
+			int minsum = 0, maxsum = 0;
+			for(int i = 0; i < n; i += 2) {
+				minsum += abs(a[i] - a[i + 1]);
+			}
+			int start = 0, end = n - 1;
+			while(start <= end) {
+				maxsum += abs(a[start] - a[end]);
+				start++;
+				end--;
+			}
+			cout << minsum << " " << maxsum << "\n";
 		}
-		for(int i = div + 1; i < n; i++) {
-			sum2 -= a[i];
-		}
-
-		cout << sum1 - sum2 <<" " << sum1 + sum2;
-		cout << "\n";
-
-		//debug
-		// int diff = a[0];
-		// for(int i = 1; i < n; i++) {
-		// 	diff -= a[i];
-		// }
-		// cout << diff;
 	}
 
 	return 0;
