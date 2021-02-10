@@ -6,19 +6,13 @@ using namespace std;
 #define mod     1000000007
 #define inf     1e18
 
-int longestNested(int* a, int n) {
+ll solve(ll* a, ll n) {
 	int res = 0;
 	for (int i = 0; i < n; i++) {
-		//choose any ele, here i have chosen Ist Ele
-		int curr = a[i];
-		int cnt  = 0;
-		while (a[i] != INT_MIN) {
-			int temp = curr;
-			curr = a[curr];
-			cnt++;
-			a[temp] = INT_MIN;
+		if (a[i] >= 0) {
+			ld sr = sqrt(a[i]);
+			if (sr * sr == a[i]) res++;
 		}
-		res = max(res, cnt);
 	}
 	return res;
 }
@@ -32,13 +26,12 @@ int main() {
 	freopen("output.txt", "w", stdout);
 #endif
 	// Start code here....
-	int n;
+	ll n;
 	cin >> n;
-	int a[n];
-	for (int i = 0 ; i < n; i++) cin >> a[i];
-	int ans = longestNested(a, n);
+	ll a[n];
+	for (int i = 0; i < n; i++) cin >> a[i];
+	ll ans = solve(a, n);
 	cout << ans;
-
 
 #ifndef ONLINE_JUDGE
 	clock_t end = clock();
@@ -46,11 +39,3 @@ int main() {
 #endif
 	return 0;
 }
-
-/*
-input
-7
-5 4 0 3 1 6 2
-output
-4
-*/
