@@ -6,87 +6,22 @@ using namespace std;
 #define mod     1000000007
 #define inf     1e18
 
-int exactMeetTime(string meetTime) {
-	int res;
-	string ans;
-	int h1 = (int)meetTime[1] - '0';
-	int h2 = (int)meetTime[0] - '0';
-	int hh = (h2 * 10 + h1 % 10);
-
-	//if time is in AM
-	if (meetTime[6] == 'A') {
-		if (hh == 12) {
-			for (int i = 0; i <= 4; i++) {
-				if (meetTime[i] == ':') continue;
-				else ans = ans + meetTime[i];
-			}
-			res = stoi(ans);
-		} else {
-			for (int i = 0; i <= 4; i++) {
-				if (meetTime[i] == ':') continue;
-				else ans = ans + meetTime[i];
-			}
-			res = stoi(ans);
-		}
-	} else { //if time is in PM
-		if (hh == 12) {
-			ans = "12";
-			for (int i = 3; i <= 4; i++) {
-				ans = ans + meetTime[i];
-			}
-			res = stoi(ans);
-		} else {
-			ans = to_string(hh) + "12";
-			for (int i = 0; i <= 4; i++) {
-				if (meetTime[i] == ':') continue;
-				else ans = ans + meetTime[i];
-			}
-			res = stoi(ans);
-		}
+int calH(string meetTime, int t) {
+	int MH;
+	MH = 10 * (meetTime[0 + t] - '0') + 1 * (meetTime[1 + t] - '0');
+	if (meetTime[6 + t] == 'P') {
+		if (MH != 12) MH += 12;
 	}
+	if (meetTime[6 + t] == 'A') {
+		if (MH == 12) MH -= 12;
+	}
+	return MH;
 }
 
-int time24(string time, string period) {
-	int res;
-	string ans;
-	//get hours
-	int h1 = (int)time[1] - '0';
-	int h2 = (int)time[0] - '0';
-	int hh = (h2 * 10 + h1 % 10);
-
-	//if time is in AM
-	if (period[0] == 'A') {
-		if (hh == 12) {
-			ans = "00";
-			for (int i = 0; i <= 4; i++) {
-				if (time[i] == ':') continue;
-				else ans = ans + time[i];
-			}
-			res = stoi(ans);
-		} else {
-			for (int i = 0; i <= 4; i++) {
-				if (time[i] == ':') continue;
-				else ans = ans + time[i];
-			}
-			res = stoi(ans);
-		}
-	} else { //if time is in PM
-		if (hh == 12) {
-			ans = "12";
-			for (int i = 0; i <= 4; i++) {
-				if (time[i] == ':') continue;
-				else ans = ans + time[i];
-			}
-			res = stoi(ans);
-		} else {
-			ans = to_string(hh) + "12";
-			for (int i = 0; i <= 4; i++) {
-				if (time[i] == ':') continue;
-				else ans = ans + time[i];
-			}
-			res = stoi(ans);
-		}
-	}
+int calM(string meetTime, int t) {
+	int MM;
+	MM = 10 * (meetTime[3 + t] - '0') + (meetTime[4 + t] - '0');
+	return MM;
 }
 
 int main() {
@@ -100,34 +35,35 @@ int main() {
 	// Start code here....
 	int t;
 	cin >> t;
+	cin.ignore();
 	while (t--) {
 		string meetTime;
 		getline(cin, meetTime);
-		int cmp1 = exactMeetTime(meetTime);
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		int MH = calH(meetTime, 0);
+		int MM = calM(meetTime, 0);
 		int n;
 		cin >> n;
+		cin.ignore();
+		string res = "";
 		while (n--) {
-			string startTime;
-			cin >> startTime;
-			string startPeriod;
-			cin >> startPeriod;
-			int cmp2 = time24(startTime, startPeriod);
+			string friendTime;
+			getline(cin, friendTime);
+			int friendStartHour = calH(friendTime, 0);
+			int friendStartMinute = calM(friendTime, 0);
+			int friendEndHour = calH(friendTime, 9);
+			int friendEndMinute = calM(friendTime, 9);
 
-			string endTime;
-			cin >> endTime;
-			string endPeriod;
-			cin >> endPeriod;
-			int cmp3 = time24(endTime, endPeriod);
-
-			string str;
-			if (((cmp2 < cmp1) || (cmp2 == cmp1)) && ((cmp1 < cmp3) || (cmp1 == cmp3))) {
-				str = str + '1';
+			if ((friendStartHour > MH) || (friendEndHour < MH)) {
+				res = res + '0';
+			} else if (friendStartHour == MH && friendStartMinute > MM) {
+				res = res + '0';
+			} else if (friendEndHour == MH && friendEndMinute < MM) {
+				res = res + '0';
 			} else {
-				str = str + '0';
+				res = res + '1';
 			}
-			cout << str << "\n";
 		}
+		cout << res << "\n";
 	}
 
 #ifndef ONLINE_JUDGE
